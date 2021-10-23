@@ -1,0 +1,275 @@
+[
+    {
+        "id": "73d46e38df85d9af",
+        "type": "tab",
+        "label": "SmartKitchen",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d049ee653a758acc",
+        "type": "function",
+        "z": "73d46e38df85d9af",
+        "name": "process request",
+        "func": "const key = msg.payload.key;\nconst loteId = msg.payload.loteId;\n\nif (key && loteId) {\n    msg.valid=true;\n    msg.payload={\n        \"dispositivoKey\": key,\n        \"loteId\": loteId\n    }\n} else {\n    msg.valid=false;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 280,
+        "wires": [
+            [
+                "470d9e44b45f5892"
+            ]
+        ]
+    },
+    {
+        "id": "721ec9427afb7f08",
+        "type": "http request",
+        "z": "73d46e38df85d9af",
+        "name": "webservice request",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://arach-smartkitchen.herokuapp.com/dispensa",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "credentials": {},
+        "x": 510,
+        "y": 420,
+        "wires": [
+            [
+                "4d63d8cb54c4390a",
+                "5f7419320ca19445"
+            ]
+        ]
+    },
+    {
+        "id": "58b89457e5b72c3e",
+        "type": "http in",
+        "z": "73d46e38df85d9af",
+        "name": "/register",
+        "url": "/register",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 220,
+        "wires": [
+            [
+                "d049ee653a758acc"
+            ]
+        ]
+    },
+    {
+        "id": "a3fa69238f2b9de2",
+        "type": "http response",
+        "z": "73d46e38df85d9af",
+        "name": "response",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1220,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "4d63d8cb54c4390a",
+        "type": "function",
+        "z": "73d46e38df85d9af",
+        "name": "process response",
+        "func": "if (msg.statusCode == 200) {\n    msg.status=msg.payload.status;    \n} else {\n    msg.status=\"NOK\";    \n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 460,
+        "wires": [
+            [
+                "9e3f2fd3780ed2f8"
+            ]
+        ]
+    },
+    {
+        "id": "9e3f2fd3780ed2f8",
+        "type": "switch",
+        "z": "73d46e38df85d9af",
+        "name": "",
+        "property": "status",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "NOK",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "OK",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 910,
+        "y": 420,
+        "wires": [
+            [
+                "2ca098686f64c2e0"
+            ],
+            [
+                "a7a90f2ac8a175ca"
+            ]
+        ]
+    },
+    {
+        "id": "a7a90f2ac8a175ca",
+        "type": "function",
+        "z": "73d46e38df85d9af",
+        "name": "OK",
+        "func": "msg.payload=\"OK\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 500,
+        "wires": [
+            [
+                "a3fa69238f2b9de2",
+                "bc883536dfc0890e"
+            ]
+        ]
+    },
+    {
+        "id": "2ca098686f64c2e0",
+        "type": "function",
+        "z": "73d46e38df85d9af",
+        "name": "NOK",
+        "func": "msg.payload=\"NOK\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 340,
+        "wires": [
+            [
+                "a3fa69238f2b9de2",
+                "63664939f9f35973"
+            ]
+        ]
+    },
+    {
+        "id": "bc883536dfc0890e",
+        "type": "debug",
+        "z": "73d46e38df85d9af",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1230,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "5f7419320ca19445",
+        "type": "debug",
+        "z": "73d46e38df85d9af",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "63664939f9f35973",
+        "type": "debug",
+        "z": "73d46e38df85d9af",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1230,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "8938f7f0f19d4a64",
+        "type": "inject",
+        "z": "73d46e38df85d9af",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"dispositivoKey\":\"123456789\",\"loteId\":1}",
+        "payloadType": "json",
+        "x": 310,
+        "y": 480,
+        "wires": [
+            [
+                "721ec9427afb7f08"
+            ]
+        ]
+    },
+    {
+        "id": "470d9e44b45f5892",
+        "type": "switch",
+        "z": "73d46e38df85d9af",
+        "name": "",
+        "property": "valid",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 310,
+        "y": 340,
+        "wires": [
+            [
+                "2ca098686f64c2e0"
+            ],
+            [
+                "721ec9427afb7f08"
+            ]
+        ]
+    }
+]
