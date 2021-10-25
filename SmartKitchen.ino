@@ -79,7 +79,7 @@ void ledsOff() {
 // http request
 bool getResponse(String deviceKey, String productCode) {
   HTTPClient http;
-  String serverUrl = HOST_NAME + "?dispositivoKey=" + deviceKey + "&loteId=" + productCode;
+  String serverUrl = HOST_NAME + "?key=" + deviceKey + "&loteId=" + productCode;
   
   http.begin(serverUrl.c_str());
   int httpResponseCode = http.GET();
